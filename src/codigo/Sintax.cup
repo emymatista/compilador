@@ -1,0 +1,87 @@
+package codigo;
+
+import java_cup.runtime.Symbol;
+
+parser code
+{:
+    private Symbol s;
+
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+    }
+:};
+
+terminal Int, Float, String, If, Else, Else_If, For, While, Imprimir,
+    Linea, ParentesisAbierto, ParentesisCerrado, LlaveAbierto, LlaveCerrado, Arreglo, OP_Igualdad, OP_Mayor,
+    OP_Menor, OP_MayorOIgual, OP_MenorOIgual, OP_NoIgual, Igual, Suma, Resta, Multiplicacion, Exponenciacion,
+    Division, Modulo, Start, NumeroDecimal, Identificador, Numero, Cadena, Error;
+non terminal INICIO, SENTENCIA, DECLARACION, IF, IF_ELSE, WHILE, SENTENCIA_BOOLEANA, IMPRIMIR;
+
+start with INICIO;
+
+INICIO ::= 
+    Start LlaveAbierto SENTENCIA LlaveCerrado |
+    LlaveAbierto SENTENCIA LlaveCerrado |
+    LlaveAbierto SENTENCIA IMPRIMIR LlaveCerrado 
+;
+
+SENTENCIA ::= 
+    SENTENCIA DECLARACION |
+    DECLARACION |
+    SENTENCIA IF | 
+    IF |
+    SENTENCIA IF_ELSE |
+    IF_ELSE |
+    SENTENCIA WHILE |
+    WHILE |
+    IMPRIMIR
+;
+
+IMPRIMIR ::=
+    Imprimir ParentesisAbierto Cadena ParentesisCerrado |
+    Imprimir ParentesisAbierto Identificador ParentesisCerrado
+; 
+
+DECLARACION ::= 
+    Int Identificador |
+    Int Identificador Igual Numero |
+    Float Identificador |
+    Float Identificador Igual NumeroDecimal |
+    String Identificador |
+    String Identificador Igual Cadena
+;  
+
+IF ::= If ParentesisAbierto SENTENCIA_BOOLEANA ParentesisCerrado LlaveAbierto SENTENCIA LlaveCerrado
+;
+
+SENTENCIA_BOOLEANA ::=
+    Identificador OP_Igualdad NumeroDecimal|
+    Identificador OP_Igualdad Numero |
+    Identificador OP_Mayor NumeroDecimal|
+    Identificador OP_Mayor Numero |
+    Identificador OP_Menor NumeroDecimal|
+    Identificador OP_Menor Numero |
+    Identificador OP_MayorOIgual NumeroDecimal|
+    Identificador OP_MayorOIgual Numero |
+    Identificador OP_MenorOIgual NumeroDecimal|
+    Identificador OP_MenorOIgual Numero |
+    Identificador OP_NoIgual NumeroDecimal|
+    Identificador OP_NoIgual Numero |
+    Identificador OP_Igualdad Identificador|
+    Identificador OP_Mayor Identificador |
+    Identificador OP_Menor Identificador |
+    Identificador OP_MayorOIgual Identificador |
+    Identificador OP_MenorOIgual Identificador |
+    Identificador OP_NoIgual Identificador
+;
+
+IF_ELSE ::= If ParentesisAbierto SENTENCIA_BOOLEANA ParentesisCerrado LlaveAbierto SENTENCIA LlaveCerrado Else_If ParentesisAbierto SENTENCIA_BOOLEANA ParentesisCerrado LlaveAbierto SENTENCIA LlaveCerrado Else LlaveAbierto SENTENCIA LlaveCerrado
+;
+
+WHILE ::= While ParentesisAbierto SENTENCIA_BOOLEANA ParentesisCerrado LlaveAbierto SENTENCIA LlaveCerrado
+;
+
